@@ -1,0 +1,5 @@
+# TripAdvisor activity/attraction URLs
+# Browse tripadvisor.com, copy URLs here, one per line
+https://www.tripadvisor.com/Attraction_Review-g187147-d188757-Reviews-Eiffel_Tower-Paris_Ile_de_France.html
+https://www.tripadvisor.com/Attraction_Review-g187147-d188709-Reviews-Louvre_Museum-Paris_Ile_de_France.html
+https://www.tripadvisor.com/Attraction_Review-g187147-d195765-Reviews-Notre_Dame_Cathedral-Paris_Ile_de_France.html

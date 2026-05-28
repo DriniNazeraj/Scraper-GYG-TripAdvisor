@@ -1,0 +1,41 @@
+# Cloned reference repos (not our code)
+deephotel-scraper/
+tripadvisor-scraper-scrapy/
+
+# Data output
+*.csv
+*.json
+data/
+!unified-scraper/data/.gitkeep
+!getyourguide-scraper/data/.gitkeep
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+# Browser
+response.html
+inspected_page.html
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Claude
+.claude/

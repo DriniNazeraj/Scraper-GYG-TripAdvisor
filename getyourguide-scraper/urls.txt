@@ -1,0 +1,4 @@
+# Paste GetYourGuide activity URLs here, one per line
+# Example:
+# https://www.getyourguide.com/paris-l16/eiffel-tower-skip-the-line-summit-access-guided-tour-t415976/
+# https://www.getyourguide.com/rome-l33/colosseum-roman-forum-palatine-hill-entry-ticket-t212474/
