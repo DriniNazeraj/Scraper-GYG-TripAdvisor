@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scraper Showcase - What We Can Extract</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f5f7fa; color: #333; line-height: 1.6; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+  h1 { text-align: center; color: #1a1a2e; font-size: 2.2em; margin: 30px 0 10px; }
+  .subtitle { text-align: center; color: #666; font-size: 1.1em; margin-bottom: 40px; }
+  h2 { color: #16213e; margin: 35px 0 15px; padding-bottom: 8px; border-bottom: 3px solid #0f3460; }
+  h3 { color: #0f3460; margin: 20px 0 10px; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0 25px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+  th { background: #0f3460; color: white; padding: 12px 15px; text-align: left; font-weight: 600; }
+  td { padding: 10px 15px; border-bottom: 1px solid #eee; }
+  tr:hover td { background: #f0f4ff; }
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 0.85em; font-weight: 600; }
+  .badge-gyg { background: #e8f5e9; color: #2e7d32; }
+  .badge-ta { background: #e3f2fd; color: #1565c0; }
+  .section { background: white; border-radius: 12px; padding: 25px 30px; margin: 20px 0; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .cmd { background: #1a1a2e; color: #00ff88; padding: 15px 20px; border-radius: 8px; font-family: monospace; font-size: 0.95em; margin: 10px 0; overflow-x: auto; }
+  .review-box { background: #fafafa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 15px 0; }
+  .star { color: #ffc107; font-size: 1.2em; }
+  .field-name { font-weight: 600; color: #0f3460; }
+  .four-col { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; }
+  @media (max-width: 768px) { .four-col { grid-template-columns: 1fr 1fr; } }
+  .stat-box { text-align: center; padding: 20px; background: white; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+  .stat-num { font-size: 2.5em; font-weight: 700; color: #0f3460; }
+  .stat-label { color: #666; font-size: 0.9em; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Scraper Showcase</h1>
+<p class="subtitle">GetYourGuide + TripAdvisor | Unified Tour &amp; Activity Scraper</p>
+
+<div class="four-col" style="margin-bottom: 30px;">
+  <div class="stat-box">
+    <div class="stat-num">2</div>
+    <div class="stat-label">Platforms</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">54+</div>
+    <div class="stat-label">Results per search</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">25+</div>
+    <div class="stat-label">Data fields per review</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-num">&lt;25s</div>
+    <div class="stat-label">Both platforms parallel</div>
+  </div>
+</div>
+
+<!-- SECTION 1: HOW IT WORKS -->
+<h2>How It Works</h2>
+<div class="section">
+  <p>A single command searches <span class="badge badge-gyg">GetYourGuide</span> and <span class="badge badge-ta">TripAdvisor</span> simultaneously using parallel threads.</p>
+  <div class="cmd">python unified_scraper.py search "paris tours"</div>
+  <p style="margin-top:10px">Output: <code>combined_search.csv</code> + <code>combined_search.json</code> with all results merged.</p>
+  <div class="cmd">python unified_scraper.py reviews "Ostro Beach Bar Restaurant" --max-pages 4</div>
+  <p style="margin-top:10px">Output: <code>ta_reviews.csv</code> + <code>ta_reviews.json</code> with full review data.</p>
+</div>
+
+<!-- SECTION 2: GETYOURGUIDE -->
+<h2><span class="badge badge-gyg">GetYourGuide</span> Data Fields</h2>
+
+<div class="section">
+<h3>Search Results (per activity)</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field-name">title</td><td>string</td><td>Activity name</td></tr>
+<tr><td class="field-name">url</td><td>string</td><td>Full GetYourGuide link</td></tr>
+<tr><td class="field-name">rating</td><td>float</td><td>Average rating (1.0 - 5.0)</td></tr>
+<tr><td class="field-name">review_count</td><td>integer</td><td>Total number of reviews</td></tr>
+<tr><td class="field-name">price</td><td>string</td><td>Price text (includes original + discounted)</td></tr>
+<tr><td class="field-name">price_value</td><td>float</td><td>Extracted numeric price (lowest)</td></tr>
+<tr><td class="field-name">duration</td><td>string</td><td>Duration + extras (e.g. "6 hours - Skip the line")</td></tr>
+<tr><td class="field-name">image_url</td><td>string</td><td>Activity thumbnail URL</td></tr>
+</table>
+
+<h3>Activity Detail Page (additional fields)</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field-name">description</td><td>string</td><td>Full activity description (up to 2000 chars)</td></tr>
+<tr><td class="field-name">meeting_point</td><td>string</td><td>Meeting point / location info</td></tr>
+<tr><td class="field-name">highlights</td><td>list</td><td>Activity highlights</td></tr>
+<tr><td class="field-name">inclusions</td><td>list</td><td>What's included</td></tr>
+<tr><td class="field-name">structured_data</td><td>JSON-LD</td><td>Schema.org structured data (if available)</td></tr>
+</table>
+
+<h3>Live Example Data</h3>
+<table>
+<tr><th>Title</th><th>Rating</th><th>Reviews</th><th>Price</th><th>Duration</th></tr>
+<tr>
+    <td>Bar: Montenegro Highlights Tour for Cruise Passengers</td>
+    <td>4.3</td>
+    <td>27</td>
+    <td>From€90</td>
+    <td>6 hours • Skip the line</td>
+    </tr>
+<tr>
+    <td>Bar: Old Town and Rikavac Canyon Tour with Food and Rakija</td>
+    <td>4.8</td>
+    <td>12</td>
+    <td>From€99</td>
+    <td>5 - 5.5 hours • Small group • Pickup available</td>
+    </tr>
+<tr>
+    <td>From Bar: Budva Old Town and Sveti Stefan Shore Excursion</td>
+    <td>5.0</td>
+    <td>4</td>
+    <td>From€155</td>
+    <td>7 hours • Skip the line • Small group</td>
+    </tr>
+<tr>
+    <td>Bar: Rumija 4x4 Experience with a Traditional Lunch</td>
+    <td>5.0</td>
+    <td>5</td>
+    <td>From€149</td>
+    <td>5 - 5.5 hours • Private option available</td>
+    </tr>
+<tr>
+    <td>Tour from Bar: Kotor Old City & Cable Car and Alpine Coaster</td>
+    <td>5.0</td>
+    <td>2</td>
+    <td>From€120€84</td>
+    <td>7 hours • Pickup available</td>
+    </tr>
+
+</table>
+</div>
+
+<!-- SECTION 3: TRIPADVISOR -->
+<h2><span class="badge badge-ta">TripAdvisor</span> Data Fields</h2>
+
+<div class="section">
+<h3>Restaurant / Attraction Info</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Example (Ostro Beach Bar)</th></tr>
+<tr><td class="field-name">name</td><td>string</td><td>Ostro Beach Bar &restaurant</td></tr>
+<tr><td class="field-name">tripadvisor_entity_id</td><td>integer</td><td>23489070</td></tr>
+<tr><td class="field-name">link</td><td>string</td><td><a href="https://www.tripadvisor.com/Restaurant_Review-g4505725-d23489070-Reviews-Ostro_Beach_Bar_restaurant-Ksamil_Saranda_Vlore_County.html" style="color:#1565c0">TripAdvisor Link</a></td></tr>
+<tr><td class="field-name">place_type</td><td>string</td><td>RESTAURANT</td></tr>
+<tr><td class="field-name">coordinates.latitude</td><td>float</td><td>39.77585</td></tr>
+<tr><td class="field-name">coordinates.longitude</td><td>float</td><td>20.001251</td></tr>
+<tr><td class="field-name">featured_image</td><td>URL</td><td><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1d/3f/fe/1d/logo.jpg" height="50" style="border-radius:4px"></td></tr>
+<tr><td class="field-name">parent_location</td><td>object</td><td>Ksamil (ID: 4505725)</td></tr>
+</table>
+
+<h3>Attraction Search Fields (additional)</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field-name">rating</td><td>float</td><td>Average rating (1.0 - 5.0)</td></tr>
+<tr><td class="field-name">reviews</td><td>integer</td><td>Total review count</td></tr>
+<tr><td class="field-name">description</td><td>string</td><td>Place description</td></tr>
+<tr><td class="field-name">neighborhood</td><td>string</td><td>Neighborhood name</td></tr>
+<tr><td class="field-name">categories</td><td>list</td><td>Category tags (e.g. "Art Museums", "Landmarks")</td></tr>
+<tr><td class="field-name">award</td><td>object</td><td>Award name, year, type (e.g. Travelers Choice)</td></tr>
+<tr><td class="field-name">pricing_text</td><td>string</td><td>Ticket pricing (e.g. "Admission from $51")</td></tr>
+<tr><td class="field-name">commerce.tickets_link</td><td>URL</td><td>Direct tickets link</td></tr>
+<tr><td class="field-name">commerce.tours_link</td><td>URL</td><td>Related tours link</td></tr>
+<tr><td class="field-name">experiences_count</td><td>integer</td><td>Number of related experiences</td></tr>
+</table>
+
+<h3>Review Fields (77 reviews available for Ostro)</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Example</th></tr>
+<tr><td class="field-name">review_id</td><td>integer</td><td>1061620907</td></tr>
+<tr><td class="field-name">review_link</td><td>URL</td><td><a href="https://www.tripadvisor.com/ShowUserReviews-g4505725-d23489070-r1061620907-Ostro_Beach_Bar_restaurant-Ksamil_Saranda_Vlore_County.html" style="color:#1565c0">View on TripAdvisor</a></td></tr>
+<tr><td class="field-name">title</td><td>string</td><td>😕</td></tr>
+<tr><td class="field-name">text</td><td>string</td><td>Full review text (unlimited length)</td></tr>
+<tr><td class="field-name">rating</td><td>integer</td><td>2/5 <span class="star">&#9733;&#9733;&#9734;&#9734;&#9734;</span></td></tr>
+<tr><td class="field-name">subratings</td><td>list</td><td>Breakdown by category:</td></tr>
+<tr><td style="padding-left:30px">Value</td><td>1/5</td></tr>
+<tr><td style="padding-left:30px">Service</td><td>1/5</td></tr>
+<tr><td style="padding-left:30px">Food</td><td>1/5</td></tr>
+<tr><td style="padding-left:30px">Atmosphere</td><td>5/5</td></tr>
+
+<tr><td class="field-name">like_count</td><td>integer</td><td>0</td></tr>
+<tr><td class="field-name">language</td><td>string</td><td>en</td></tr>
+<tr><td class="field-name">is_translated</td><td>boolean</td><td>False</td></tr>
+<tr><td class="field-name">original_language</td><td>string</td><td>en</td></tr>
+<tr><td class="field-name">owner_response</td><td>string/null</td><td>None (restaurant has not replied)</td></tr>
+<tr><td class="field-name">trip.trip_type</td><td>string</td><td>couples</td></tr>
+<tr><td class="field-name">trip.stay_date</td><td>date</td><td>2026-05-31</td></tr>
+<tr><td class="field-name">reviewer.name</td><td>string</td><td>Pedro M</td></tr>
+<tr><td class="field-name">reviewer.username</td><td>string</td><td>P1494KDpedrom</td></tr>
+<tr><td class="field-name">reviewer.profile_link</td><td>URL</td><td><a href="https://www.tripadvisor.com/Profile/P1494KDpedrom" style="color:#1565c0">View Profile</a></td></tr>
+<tr><td class="field-name">reviewer.avatar</td><td>URL</td><td><img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/f0/d5/default-avatar-2020-17.jpg" height="30" style="border-radius:50%"></td></tr>
+<tr><td class="field-name">reviewer.contribution_count</td><td>integer</td><td>1</td></tr>
+<tr><td class="field-name">reviewer.hometown</td><td>string/null</td><td>Not provided</td></tr>
+<tr><td class="field-name">reviewer.is_verified</td><td>boolean</td><td>False</td></tr>
+<tr><td class="field-name">images</td><td>list</td><td>Photo URLs attached to review</td></tr>
+<tr><td class="field-name">created_at_date</td><td>date</td><td>2026-05-25</td></tr>
+<tr><td class="field-name">published_at_date</td><td>date</td><td>2026-05-25</td></tr>
+</table>
+
+<h3>Review Metadata (per query)</h3>
+<table>
+<tr><th>Field</th><th>Type</th><th>Description</th></tr>
+<tr><td class="field-name">count</td><td>integer</td><td>Total reviews available (77)</td></tr>
+<tr><td class="field-name">per_page</td><td>integer</td><td>Reviews per API request (20)</td></tr>
+<tr><td class="field-name">total_pages</td><td>integer</td><td>Pages available (4)</td></tr>
+<tr><td class="field-name">rating_distribution</td><td>object</td><td>Count of reviews per star rating (1-5)</td></tr>
+<tr><td class="field-name">language_distribution</td><td>object</td><td>Count of reviews per language</td></tr>
+<tr><td class="field-name">review_keywords</td><td>list</td><td>Most common keywords found in reviews</td></tr>
+</table>
+</div>
+
+<!-- SECTION 4: REAL REVIEW EXAMPLE -->
+<h2>Full Review Example (Real Data)</h2>
+<div class="section">
+<div class="review-box">
+  <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px">
+    <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/f6/f0/d5/default-avatar-2020-17.jpg" height="45" style="border-radius:50%">
+    <div>
+      <strong>Pedro M</strong> <span style="color:#888">(@P1494KDpedrom)</span><br>
+      <span style="color:#888; font-size:0.9em">1 contributions | Trip: couples | 2026-05-25</span>
+    </div>
+  </div>
+  <div class="star" style="margin-bottom:8px">&#9733;&#9733;&#9734;&#9734;&#9734; 2/5</div>
+  <p style="font-size:1.05em; margin-bottom:12px"><strong>"😕"</strong></p>
+  <p style="color:#444">The food was good, but the experience was disappointing due to the lack of transparency. The staff only mentioned that the dish cost 1500 lek with mashed potatoes and vegetables, but did not clearly explain that the price was per 100g or that they would automatically serve 300g. In the end, the bill was 4500 lek. The restaurant should confirm the weight and final price before preparing the meat.</p>
+  <div style="margin-top:15px; padding-top:12px; border-top:1px solid #eee">
+    <strong>Sub-ratings:</strong> Value: 1/5 | Service: 1/5 | Food: 1/5 | Atmosphere: 5/5
+  </div>
+</div>
+</div>
+
+<div style="text-align:center; padding:30px; color:#888; font-size:0.9em">
+  Generated by Unified Tour Scraper | GetYourGuide (Selenium) + TripAdvisor (omkarcloud API)<br>
+  GitHub: <a href="https://github.com/DriniNazeraj/Scraper-GYG-TripAdvisor" style="color:#1565c0">DriniNazeraj/Scraper-GYG-TripAdvisor</a>
+</div>
+
+</div>
+</body>
+</html>
